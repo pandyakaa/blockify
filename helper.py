@@ -135,7 +135,7 @@ def split_block(block: str) -> Tuple[str, str]:
     splitted_block = [block[i:i+chunk_size]
                       for i in range(0, len(block), chunk_size)]
 
-    return split_block[0], split_block[1]
+    return splitted_block[0], splitted_block[1]
 
 
 def initiate_counter_block(n: int) -> list:
@@ -161,4 +161,5 @@ if __name__ == "__main__":
     print(text_to_bin('pandyaka pandyaka pandyaka'))
     print(text_to_block('pandyaka pandyaka pandyaka'))
 
+    print(split_block("pandyaka"))
     print(initiate_counter_block(16))
