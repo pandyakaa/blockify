@@ -3,28 +3,28 @@ import time
 
 if __name__ == "__main__":
 
-    ebc_enc_start_time = time.time()
-    enc_tc = encrypt('pandyaka', 'aptanagi', 'ebc')
-    ebc_enc_end_time = time.time()
-    print('ebc time {}'.format(ebc_enc_end_time - ebc_enc_start_time))
+    ecb_enc_start_time = time.time()
+    enc_tc = encrypt('pandyaka aptanagi', 'ini adalah kunci', 'ecb')
+    ecb_enc_end_time = time.time()
+    print('ecb time {}'.format(ecb_enc_end_time - ecb_enc_start_time))
 
-    ebc_dec_start_time = time.time()
-    dec_tc = decrypt(enc_tc, 'aptanagi', 'ebc')
-    ebc_dec_end_time = time.time()
-    print('ebc time {}'.format(ebc_dec_end_time - ebc_dec_start_time))
+    ecb_dec_start_time = time.time()
+    dec_tc = decrypt(enc_tc, 'ini adalah kunci', 'ecb')
+    ecb_dec_end_time = time.time()
+    print('ecb time {}'.format(ecb_dec_end_time - ecb_dec_start_time))
 
-    print('ebc encryption result: {}'.format(enc_tc))
-    print('ebc decryption result: {}'.format(dec_tc))
+    print('ecb encryption result: {}'.format(enc_tc))
+    print('ecb decryption result: {}'.format(dec_tc))
 
     print('===============================================================')
 
     cbc_enc_start_time = time.time()
-    enc_tc = encrypt('pandyaka', 'aptanagi', 'cbc')
+    enc_tc = encrypt('pandyaka aptanagi', 'ini adalah kunci', 'cbc')
     cbc_enc_end_time = time.time()
     print('cbc time {}'.format(cbc_enc_end_time - cbc_enc_start_time))
 
     cbc_dec_start_time = time.time()
-    dec_tc = decrypt(enc_tc, 'aptanagi', 'cbc')
+    dec_tc = decrypt(enc_tc, 'ini adalah kunci', 'cbc')
     cbc_dec_end_time = time.time()
     print('cbc time {}'.format(cbc_dec_end_time - cbc_dec_start_time))
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     print('===============================================================')
 
     counter_enc_start_time = time.time()
-    enc_tc = encrypt('pandyaka', 'aptanagi', 'counter')
+    enc_tc = encrypt('pandyaka aptanagi', 'aptanagi', 'counter')
     counter_enc_end_time = time.time()
     print('counter time {}'.format(counter_enc_end_time - counter_enc_start_time))
 

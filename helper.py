@@ -89,6 +89,16 @@ def permute(k: str, arr: list, n: int) -> str:
     return permutation
 
 
+def bin_to_text(binary: str) -> str:
+    chunk_size = 8
+    bin_block = [binary[i:i+chunk_size]
+                 for i in range(0, len(binary), chunk_size)]
+
+    text = "".join([chr(int(binary, 2)) for binary in bin_block])
+
+    return text
+
+
 # calculating xow of two strings of binary number a and b
 def xor(a: str, b: str) -> str:
     ans = ""
@@ -163,3 +173,5 @@ if __name__ == "__main__":
 
     print(split_block("pandyaka"))
     print(initiate_counter_block(16))
+
+    print(bin_to_text('111000101001100110100101001000001110001010011001101001100010000011100010100110011010000000100000111000101001100110100011'))
