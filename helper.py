@@ -1,4 +1,7 @@
 # Some functions source: https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/
+from typing import Tuple
+from constant import BLOCK_SIZE
+
 
 # Hexadecimal to binary conversion
 def hex_to_bin(s: str) -> str:
@@ -104,14 +107,14 @@ def text_to_bin(text: str) -> str:
         if len(i) != 8:
             i = '0' * (8 - len(i)) + i
         res += i
-    
+
     if len(res) < 128 and len(res) % 128 != 0:
         res += ('0' * (128 - (len(res) % 128)))
 
     return res
 
 
-def text_to_block(text: str, block_size=128) -> list:
+def text_to_block(text: str, block_size=BLOCK_SIZE) -> list:
     res = ''
     for i in bytearray(text, encoding='utf-8'):
         i = format(i, 'b')
@@ -127,6 +130,23 @@ def text_to_block(text: str, block_size=128) -> list:
     return blocks
 
 
+def split_block(block: str) -> Tuple[str, str]:
+    chunk_size = len(block) // 2
+    splitted_block = [block[i:i+chunk_size]
+                      for i in range(0, len(block), chunk_size)]
+
+    return split_block[0], split_block[1]
+
+
+def initiate_counter_block(n: int) -> list:
+    counter_blocks = []
+    for i in range(n):
+        counter_block = ('0' * (BLOCK_SIZE-i)) + ('1' * i)
+        counter_blocks.append(counter_block)
+
+    return counter_blocks
+
+
 if __name__ == "__main__":
     print(hex_to_bin('123'))
     print(bin_to_hex('0100'))
@@ -140,3 +160,5 @@ if __name__ == "__main__":
 
     print(text_to_bin('pandyaka pandyaka pandyaka'))
     print(text_to_block('pandyaka pandyaka pandyaka'))
+
+    print(initiate_counter_block(16))
