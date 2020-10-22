@@ -127,12 +127,12 @@ def text_to_bin(text: str) -> str:
 
 
 def text_to_block(text: str, block_size=BLOCK_SIZE) -> list:
-    res = ''
-    for i in bytearray(text, encoding='utf-8'):
-        i = format(i, 'b')
-        if len(i) != 8:
-            i = '0' * (8 - len(i)) + i
-        res += i
+    res = ''.join(format(ord(c), '08b') for c in text)
+    # for i in bytearray(text, encoding='utf-8'):
+    #     i = format(i, 'b')
+    #     if len(i) != 8:
+    #         i = '0' * (8 - len(i)) + i
+    #     res += i
 
     if len(res) % 128 != 0:
         res += ('0' * (128 - (len(res) % 128)))
@@ -195,7 +195,7 @@ def negate(string: str):
         if s == '0':
             res += '1'
         else:
-            res += ('0')
+            res += '0'
 
     return res
 

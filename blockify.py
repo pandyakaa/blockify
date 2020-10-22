@@ -12,16 +12,11 @@ def generate_key(key: str, n: int) -> list:
     keys = []
 
     random.seed(n)
-    # for i in range(n):
-    #     sample_binary_key = random.sample(binary_key, 64)
-    #     sample_binary_key = rotate_left(sample_binary_key, 4, 64)
-    #     sample_binary_key = "".join(sample_binary_key)
-    #     keys.append(sample_binary_key)
 
     for i in range(n):
-        sample_binary_key = [binary_key[j] for j in range(64)]
-        # sample_binary_key = rotate_left(sample_binary_key, 4, 64)
-        # sample_binary_key = random.sample(binary_key, 64)
+        # sample_binary_key = [binary_key[j] for j in range(64)]
+        sample_binary_key = random.sample(binary_key, 64)
+        sample_binary_key = rotate_left(sample_binary_key, 4, 64)
         sample_binary_key = "".join(sample_binary_key)
         keys.append(sample_binary_key)
 
@@ -31,15 +26,15 @@ def generate_key(key: str, n: int) -> list:
 def feistel_function(round_key: str, partial_block: str, mode: str) -> str:
     feistel_result = xor(round_key, partial_block)
 
-    feistel_result = bin_to_hex(feistel_result)
-    if mode == encrypt:
-        feistel_result = substitute(feistel_result, SBOX)
-    else:
-        feistel_result = substitute(feistel_result, SBOX_INV)
-    feistel_result = hex_to_bin(feistel_result)
+    # feistel_result = bin_to_hex(feistel_result)
+    # if mode == encrypt:
+    #     feistel_result = substitute(feistel_result, SBOX)
+    # else:
+    #     feistel_result = substitute(feistel_result, SBOX_INV)
+    # feistel_result = hex_to_bin(feistel_result)
 
-    # feistel_result = odd_even_permute(feistel_result)
-    # feistel_result = negate(feistel_result)
+    feistel_result = odd_even_permute(feistel_result)
+    feistel_result = negate(feistel_result)
 
     return feistel_result
 

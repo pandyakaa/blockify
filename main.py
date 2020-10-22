@@ -15,7 +15,6 @@ if __name__ == "__main__":
 
     print('ecb encryption result: {}'.format(enc_tc))
     print('ecb decryption result: {}'.format(dec_tc))
-    print('ecb')
 
     print('===============================================================')
 
