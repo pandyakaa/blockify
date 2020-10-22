@@ -1,22 +1,45 @@
 # TUDE algorithm implementation
-from helper import text_to_bin, text_to_block, split_block, xor, initiate_counter_block
-from constant import BLOCK_SIZE, ROUNDS
+from helper import text_to_bin, text_to_block, split_block, xor, initiate_counter_block, rotate_left, bin_to_hex, substitute, hex_to_bin, negate, odd_even_permute
+from constant import BLOCK_SIZE, ROUNDS, SBOX, SBOX_INV
 from helper import bin_to_text
+import codecs
+import random
 
 
 def generate_key(key: str, n: int) -> list:
+    key = codecs.encode(key, 'rot_13')
     binary_key = text_to_bin(key)
     keys = []
 
+    random.seed(n)
+    # for i in range(n):
+    #     sample_binary_key = random.sample(binary_key, 64)
+    #     sample_binary_key = rotate_left(sample_binary_key, 4, 64)
+    #     sample_binary_key = "".join(sample_binary_key)
+    #     keys.append(sample_binary_key)
+
     for i in range(n):
-        keys.append(binary_key)
+        sample_binary_key = [binary_key[j] for j in range(64)]
+        # sample_binary_key = rotate_left(sample_binary_key, 4, 64)
+        # sample_binary_key = random.sample(binary_key, 64)
+        sample_binary_key = "".join(sample_binary_key)
+        keys.append(sample_binary_key)
 
     return keys
 
 
-def feistel_function(round_key: str, partial_block: str) -> str:
-    key, _ = split_block(round_key)
-    feistel_result = xor(key, partial_block)
+def feistel_function(round_key: str, partial_block: str, mode: str) -> str:
+    feistel_result = xor(round_key, partial_block)
+
+    feistel_result = bin_to_hex(feistel_result)
+    if mode == encrypt:
+        feistel_result = substitute(feistel_result, SBOX)
+    else:
+        feistel_result = substitute(feistel_result, SBOX_INV)
+    feistel_result = hex_to_bin(feistel_result)
+
+    # feistel_result = odd_even_permute(feistel_result)
+    # feistel_result = negate(feistel_result)
 
     return feistel_result
 
@@ -24,7 +47,8 @@ def feistel_function(round_key: str, partial_block: str) -> str:
 def encrypt_per_block(block: str, keys: list) -> str:
     left_block, right_block = split_block(block)
     for i in range(ROUNDS):
-        feistel_function_result = feistel_function(keys[i], right_block)
+        feistel_function_result = feistel_function(
+            keys[i], right_block, 'encrypt')
         temp = xor(left_block, feistel_function_result)
 
         left_block = right_block
@@ -37,7 +61,8 @@ def encrypt_per_block(block: str, keys: list) -> str:
 def decrypt_per_block(block: str, keys: list) -> str:
     left_block, right_block = split_block(block)
     for i in range(ROUNDS-1, -1, -1):
-        feistel_function_result = feistel_function(keys[i], left_block)
+        feistel_function_result = feistel_function(
+            keys[i], left_block, 'decrypt')
         temp = xor(right_block, feistel_function_result)
 
         right_block = left_block

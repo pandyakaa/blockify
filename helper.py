@@ -1,6 +1,7 @@
 # Some functions source: https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/
 from typing import Tuple
 from constant import BLOCK_SIZE
+import copy
 
 
 # Hexadecimal to binary conversion
@@ -111,15 +112,16 @@ def xor(a: str, b: str) -> str:
 
 
 def text_to_bin(text: str) -> str:
+    if len(text) < 8:
+        for i in range(8-len(text)):
+            text += text[i % 8]
+
     res = ''
     for i in bytearray(text, encoding='utf-8'):
         i = format(i, 'b')
         if len(i) != 8:
             i = '0' * (8 - len(i)) + i
         res += i
-
-    if len(res) < 128 and len(res) % 128 != 0:
-        res += ('0' * (128 - (len(res) % 128)))
 
     return res
 
@@ -157,9 +159,66 @@ def initiate_counter_block(n: int) -> list:
     return counter_blocks
 
 
+def gcd(a: int, b: int) -> int:
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+
+
+def rotate_left(arr: list, d: int, n: int):
+    # arr_copy = copy.deepcopy(arr)
+    for i in range(gcd(d, n)):
+        # move i-th values of blocks
+        temp = arr[i]
+        j = i
+        while 1:
+            k = j + d
+            if k >= n:
+                k = k - n
+            if k == i:
+                break
+            arr[j] = arr[k]
+            j = k
+        arr[j] = temp
+
+    return arr
+
+
+def substitute(hex_arr: list, box: list) -> list:
+    return hex_arr
+
+
+def negate(string: str):
+    res = ''
+    for s in string:
+        if s == '0':
+            res += '1'
+        else:
+            res += ('0')
+
+    return res
+
+
+def odd_even_permute(string: str):
+    odd_str = ''
+    even_str = ''
+    for i in range(len(string)):
+        if i % 2 == 0:
+            even_str += string[i]
+        else:
+            odd_str += string[i]
+
+    res = even_str + odd_str
+
+    return res
+
+
 if __name__ == "__main__":
     print(hex_to_bin('123'))
     print(bin_to_hex('0100'))
+
+    print(negate('1111'))
 
     print(dec_to_bin(5))
     print(bin_to_dec(1010))
@@ -175,3 +234,6 @@ if __name__ == "__main__":
     print(initiate_counter_block(16))
 
     print(bin_to_text('111000101001100110100101001000001110001010011001101001100010000011100010100110011010000000100000111000101001100110100011'))
+
+    print(rotate_left([5, 6, 7, 8, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3,
+                       4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4], 4, 64))
