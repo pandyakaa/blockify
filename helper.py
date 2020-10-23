@@ -128,11 +128,6 @@ def text_to_bin(text: str) -> str:
 
 def text_to_block(text: str, block_size=BLOCK_SIZE) -> list:
     res = ''.join(format(ord(c), '08b') for c in text)
-    # for i in bytearray(text, encoding='utf-8'):
-    #     i = format(i, 'b')
-    #     if len(i) != 8:
-    #         i = '0' * (8 - len(i)) + i
-    #     res += i
 
     if len(res) % 128 != 0:
         res += ('0' * (128 - (len(res) % 128)))
@@ -153,7 +148,8 @@ def split_block(block: str) -> Tuple[str, str]:
 def initiate_counter_block(n: int) -> list:
     counter_blocks = []
     for i in range(n):
-        counter_block = ('0' * (BLOCK_SIZE-i)) + ('1' * i)
+        num = i % 128
+        counter_block = ('0' * (BLOCK_SIZE-num)) + ('1' * num)
         counter_blocks.append(counter_block)
 
     return counter_blocks
@@ -185,9 +181,39 @@ def rotate_left(arr: list, d: int, n: int):
     return arr
 
 
-def substitute(hex_arr: list, box: list) -> list:
-    return hex_arr
+def hex_to_dec(hex_str: str) -> int:
+    mp = {"0": 0,
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4,
+          "5": 5,
+          "6": 6,
+          "7": 7,
+          "8": 8,
+          "9": 9,
+          "A": 10,
+          "B": 11,
+          "C": 12,
+          "D": 13,
+          "E": 14,
+          "F": 15}
 
+    return mp[hex_str]
+
+
+def substitute(hex_arr: list, box: list) -> list:
+    res = []
+    blocks = [hex_arr[i:i+2] for i in range(0, len(hex_arr), 2)]
+
+    for block in blocks:
+        i = hex_to_dec(block[0])
+        j = hex_to_dec(block[1])
+        res.append(box[i][j])
+    
+    res = "".join([str(i) for i in res])
+
+    return res
 
 def negate(string: str):
     res = ''

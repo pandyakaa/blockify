@@ -3,8 +3,11 @@ import time
 
 if __name__ == "__main__":
 
+    with open('plain.txt', 'r') as f:
+        plaintext = f.read()
+
     ecb_enc_start_time = time.time()
-    enc_tc = encrypt('pandyakaaptanagi', 'ini adalah kunci', 'ecb')
+    enc_tc = encrypt(plaintext, 'ini adalah kunci', 'ecb')
     ecb_enc_end_time = time.time()
     print('ecb time {}'.format(ecb_enc_end_time - ecb_enc_start_time))
 
@@ -19,7 +22,7 @@ if __name__ == "__main__":
     print('===============================================================')
 
     cbc_enc_start_time = time.time()
-    enc_tc = encrypt('pandyakaaptanagi', 'ini adalah kunci', 'cbc')
+    enc_tc = encrypt(plaintext, 'ini adalah kunci', 'cbc')
     cbc_enc_end_time = time.time()
     print('cbc time {}'.format(cbc_enc_end_time - cbc_enc_start_time))
 
@@ -34,7 +37,7 @@ if __name__ == "__main__":
     print('===============================================================')
 
     counter_enc_start_time = time.time()
-    enc_tc = encrypt('pandyakaaptanagi', 'aptanagi', 'counter')
+    enc_tc = encrypt(plaintext, 'aptanagi', 'counter')
     counter_enc_end_time = time.time()
     print('counter time {}'.format(counter_enc_end_time - counter_enc_start_time))
 

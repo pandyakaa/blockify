@@ -14,7 +14,6 @@ def generate_key(key: str, n: int) -> list:
     random.seed(n)
 
     for i in range(n):
-        # sample_binary_key = [binary_key[j] for j in range(64)]
         sample_binary_key = random.sample(binary_key, 64)
         sample_binary_key = rotate_left(sample_binary_key, 4, 64)
         sample_binary_key = "".join(sample_binary_key)
@@ -26,12 +25,9 @@ def generate_key(key: str, n: int) -> list:
 def feistel_function(round_key: str, partial_block: str, mode: str) -> str:
     feistel_result = xor(round_key, partial_block)
 
-    # feistel_result = bin_to_hex(feistel_result)
-    # if mode == encrypt:
-    #     feistel_result = substitute(feistel_result, SBOX)
-    # else:
-    #     feistel_result = substitute(feistel_result, SBOX_INV)
-    # feistel_result = hex_to_bin(feistel_result)
+    feistel_result = bin_to_hex(feistel_result)
+    feistel_result = substitute(feistel_result, SBOX)
+    feistel_result = hex_to_bin(feistel_result)
 
     feistel_result = odd_even_permute(feistel_result)
     feistel_result = negate(feistel_result)
@@ -44,6 +40,8 @@ def encrypt_per_block(block: str, keys: list) -> str:
     for i in range(ROUNDS):
         feistel_function_result = feistel_function(
             keys[i], right_block, 'encrypt')
+        if len(feistel_function_result) < len(left_block):
+            feistel_function_result += '0' * (len(left_block) - len(feistel_function_result))
         temp = xor(left_block, feistel_function_result)
 
         left_block = right_block
