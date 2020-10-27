@@ -56,6 +56,8 @@ def decrypt_per_block(block: str, keys: list) -> str:
     for i in range(ROUNDS-1, -1, -1):
         feistel_function_result = feistel_function(
             keys[i], left_block, 'decrypt')
+        if len(feistel_function_result) < len(right_block):
+            feistel_function_result += '0' * (len(right_block) - len(feistel_function_result))
         temp = xor(right_block, feistel_function_result)
 
         right_block = left_block
